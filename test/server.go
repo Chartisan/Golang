@@ -6,7 +6,7 @@ import (
 	"math/rand"
 	"net/http"
 
-	chartisan "github.com/chartisan/go"
+	chartisan "github.com/chartisan/golang"
 	"github.com/julienschmidt/httprouter"
 )
 

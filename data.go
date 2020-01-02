@@ -1,4 +1,4 @@
-package chartisan
+package golang
 
 // ChartData represents the chart information.
 type ChartData struct {

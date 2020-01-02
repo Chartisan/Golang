@@ -1,4 +1,4 @@
-package chartisan
+package golang
 
 import "encoding/json"
 
