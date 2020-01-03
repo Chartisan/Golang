@@ -47,7 +47,10 @@ func (chart *Chartisan) Dataset(name string, values []int) *Chartisan {
 
 // ToJSON transforms the chart into the JSON representation needed.
 func (chart *Chartisan) ToJSON() string {
-	json, _ := json.Marshal(chart.serverData)
+	json, err := json.Marshal(chart.serverData)
+	if err != nil {
+		return `{"error": "Error converting chart to JSON"}`
+	}
 	return string(json)
 }
 

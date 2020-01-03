@@ -1,2 +1,2 @@
 all:
-	go run test/server.go
+	go run example/server.go
