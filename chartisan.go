@@ -10,7 +10,10 @@ type Chartisan struct {
 // Build creates a new instance of a chartisan chart.
 func Build() *Chartisan {
 	return &Chartisan{
-		serverData: ServerData{},
+		serverData: ServerData{
+			Chart:    ChartData{Extra: map[string]interface{}{}},
+			Datasets: []DatasetData{},
+		},
 	}
 }
 
@@ -20,9 +23,20 @@ func (chart *Chartisan) Labels(labels []string) *Chartisan {
 	return chart
 }
 
+// Extra adds extra information to the chart.
+func (chart *Chartisan) Extra(value map[string]interface{}) *Chartisan {
+	chart.serverData.Chart.Extra = value
+	return chart
+}
+
 // AdvancedDataset appends a new dataset to the chart or modifies an existing one.
 // If the ID has already been used, the dataset will be replaced with this one.
-func (chart *Chartisan) AdvancedDataset(name string, values []int, ID int, extra interface{}) *Chartisan {
+func (chart *Chartisan) AdvancedDataset(
+	name string,
+	values []int,
+	ID int,
+	extra map[string]interface{},
+) *Chartisan {
 	// Get or create the given dataset.
 	dataset, isNew := chart.getOrCreateDataset(name, values, ID, extra)
 	if isNew {
@@ -40,7 +54,7 @@ func (chart *Chartisan) AdvancedDataset(name string, values []int, ID int, extra
 // Dataset adds a new simple dataset to the chart. If more advanced control is
 // needed, consider using `AdvancedDataset` instead.
 func (chart *Chartisan) Dataset(name string, values []int) *Chartisan {
-	dataset, _ := chart.getOrCreateDataset(name, values, chart.getNewID(), nil)
+	dataset, _ := chart.getOrCreateDataset(name, values, chart.getNewID(), map[string]interface{}{})
 	chart.serverData.Datasets = append(chart.serverData.Datasets, *dataset)
 	return chart
 }
@@ -81,7 +95,12 @@ func (chart *Chartisan) idUsed(ID int) bool {
 }
 
 // getOrCreateDataset returns a dataset from the chart or creates a new one given the data.
-func (chart *Chartisan) getOrCreateDataset(name string, values []int, ID int, extra interface{}) (*DatasetData, bool) {
+func (chart *Chartisan) getOrCreateDataset(
+	name string,
+	values []int,
+	ID int,
+	extra map[string]interface{},
+) (*DatasetData, bool) {
 	for i := 0; i < len(chart.serverData.Datasets); i++ {
 		if chart.serverData.Datasets[i].ID == ID {
 			return &chart.serverData.Datasets[i], false
