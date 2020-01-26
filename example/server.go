@@ -11,7 +11,7 @@ import (
 )
 
 func setHeaders(w http.ResponseWriter) {
-	w.Header().Add("content-type", "application/json")
+	w.Header().Add("Content-Type", "application/json")
 	w.Header().Add("Access-Control-Allow-Origin", "*")
 }
 
