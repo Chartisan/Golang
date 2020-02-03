@@ -11,7 +11,7 @@ type Chartisan struct {
 func Build() *Chartisan {
 	return &Chartisan{
 		serverData: ServerData{
-			Chart:    ChartData{Extra: map[string]interface{}{}},
+			Chart:    ChartData{Extra: nil},
 			Datasets: []DatasetData{},
 		},
 	}
@@ -34,11 +34,10 @@ func (chart *Chartisan) Extra(value map[string]interface{}) *Chartisan {
 func (chart *Chartisan) AdvancedDataset(
 	name string,
 	values []int,
-	ID int,
 	extra map[string]interface{},
 ) *Chartisan {
 	// Get or create the given dataset.
-	dataset, isNew := chart.getOrCreateDataset(name, values, ID, extra)
+	dataset, isNew := chart.getOrCreateDataset(name, values, extra)
 	if isNew {
 		// Append the new dataset.
 		chart.serverData.Datasets = append(chart.serverData.Datasets, *dataset)
@@ -54,7 +53,7 @@ func (chart *Chartisan) AdvancedDataset(
 // Dataset adds a new simple dataset to the chart. If more advanced control is
 // needed, consider using `AdvancedDataset` instead.
 func (chart *Chartisan) Dataset(name string, values []int) *Chartisan {
-	dataset, _ := chart.getOrCreateDataset(name, values, chart.getNewID(), map[string]interface{}{})
+	dataset, _ := chart.getOrCreateDataset(name, values, nil)
 	chart.serverData.Datasets = append(chart.serverData.Datasets, *dataset)
 	return chart
 }
@@ -73,43 +72,20 @@ func (chart *Chartisan) ToObject() ServerData {
 	return chart.serverData
 }
 
-// getNewID returns an ID that is not used by any of the datasets.
-// Keep in mind, this will panic when n > 2^32 if int is 32 bits.
-// If you need more than 2^32 datasets, you're crazy.
-func (chart *Chartisan) getNewID() int {
-	for n := 0; ; n++ {
-		if !chart.idUsed(n) {
-			return n
-		}
-	}
-}
-
-// idUsed returns true if the given ID is already used.
-func (chart *Chartisan) idUsed(ID int) bool {
-	for _, dataset := range chart.serverData.Datasets {
-		if dataset.ID == ID {
-			return true
-		}
-	}
-	return false
-}
-
 // getOrCreateDataset returns a dataset from the chart or creates a new one given the data.
 func (chart *Chartisan) getOrCreateDataset(
 	name string,
 	values []int,
-	ID int,
 	extra map[string]interface{},
 ) (*DatasetData, bool) {
 	for i := 0; i < len(chart.serverData.Datasets); i++ {
-		if chart.serverData.Datasets[i].ID == ID {
+		if chart.serverData.Datasets[i].Name == name {
 			return &chart.serverData.Datasets[i], false
 		}
 	}
 	return &DatasetData{
 		Name:   name,
 		Values: values,
-		ID:     ID,
 		Extra:  extra,
 	}, true
 }
