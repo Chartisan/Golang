@@ -53,8 +53,7 @@ func (chart *Chartisan) AdvancedDataset(
 // Dataset adds a new simple dataset to the chart. If more advanced control is
 // needed, consider using `AdvancedDataset` instead.
 func (chart *Chartisan) Dataset(name string, values []int) *Chartisan {
-	dataset, _ := chart.getOrCreateDataset(name, values, nil)
-	chart.serverData.Datasets = append(chart.serverData.Datasets, *dataset)
+	chart.AdvancedDataset(name, values, nil)
 	return chart
 }
 
