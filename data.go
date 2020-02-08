@@ -9,7 +9,7 @@ type ChartData struct {
 // DatasetData represents the dataset information.
 type DatasetData struct {
 	Name   string                 `json:"name"`
-	Values []int                  `json:"values"`
+	Values []float64              `json:"values"`
 	Extra  map[string]interface{} `json:"extra"`
 }
 

@@ -33,7 +33,7 @@ func (chart *Chartisan) Extra(value map[string]interface{}) *Chartisan {
 // If the ID has already been used, the dataset will be replaced with this one.
 func (chart *Chartisan) AdvancedDataset(
 	name string,
-	values []int,
+	values []float64,
 	extra map[string]interface{},
 ) *Chartisan {
 	// Get or create the given dataset.
@@ -52,7 +52,7 @@ func (chart *Chartisan) AdvancedDataset(
 
 // Dataset adds a new simple dataset to the chart. If more advanced control is
 // needed, consider using `AdvancedDataset` instead.
-func (chart *Chartisan) Dataset(name string, values []int) *Chartisan {
+func (chart *Chartisan) Dataset(name string, values []float64) *Chartisan {
 	chart.AdvancedDataset(name, values, nil)
 	return chart
 }
@@ -74,7 +74,7 @@ func (chart *Chartisan) ToObject() ServerData {
 // getOrCreateDataset returns a dataset from the chart or creates a new one given the data.
 func (chart *Chartisan) getOrCreateDataset(
 	name string,
-	values []int,
+	values []float64,
 	extra map[string]interface{},
 ) (*DatasetData, bool) {
 	for i := 0; i < len(chart.serverData.Datasets); i++ {
