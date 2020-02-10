@@ -36,25 +36,25 @@ func (chart *Chartisan) AdvancedDataset(
 	values []float64,
 	extra map[string]interface{},
 ) *Chartisan {
-	// Get or create the given dataset.
-	dataset, isNew := chart.getOrCreateDataset(name, values, extra)
-	if isNew {
-		// Append the new dataset.
-		chart.serverData.Datasets = append(chart.serverData.Datasets, *dataset)
-		return chart
+	dataset := chart.getDataset(name)
+	if dataset != nil {
+		dataset.Name = name
+		dataset.Values = values
+		dataset.Extra = extra
+	} else {
+		chart.serverData.Datasets = append(chart.serverData.Datasets, DatasetData{
+			Name:   name,
+			Values: values,
+			Extra:  extra,
+		})
 	}
-	// Modify the existing dataset.
-	dataset.Name = name
-	dataset.Values = values
-	dataset.Extra = extra
 	return chart
 }
 
 // Dataset adds a new simple dataset to the chart. If more advanced control is
 // needed, consider using `AdvancedDataset` instead.
 func (chart *Chartisan) Dataset(name string, values []float64) *Chartisan {
-	chart.AdvancedDataset(name, values, nil)
-	return chart
+	return chart.AdvancedDataset(name, values, nil)
 }
 
 // ToJSON transforms the chart into the JSON representation needed.
@@ -72,19 +72,11 @@ func (chart *Chartisan) ToObject() ServerData {
 }
 
 // getOrCreateDataset returns a dataset from the chart or creates a new one given the data.
-func (chart *Chartisan) getOrCreateDataset(
-	name string,
-	values []float64,
-	extra map[string]interface{},
-) (*DatasetData, bool) {
+func (chart *Chartisan) getDataset(name string) *DatasetData {
 	for i := 0; i < len(chart.serverData.Datasets); i++ {
 		if chart.serverData.Datasets[i].Name == name {
-			return &chart.serverData.Datasets[i], false
+			return &chart.serverData.Datasets[i]
 		}
 	}
-	return &DatasetData{
-		Name:   name,
-		Values: values,
-		Extra:  extra,
-	}, true
+	return nil
 }
