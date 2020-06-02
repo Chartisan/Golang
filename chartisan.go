@@ -24,7 +24,7 @@ func (chart *Chartisan) Labels(labels []string) *Chartisan {
 }
 
 // Extra adds extra information to the chart.
-func (chart *Chartisan) Extra(value map[string]interface{}) *Chartisan {
+func (chart *Chartisan) Extra(value map[string]string) *Chartisan {
 	chart.serverData.Chart.Extra = value
 	return chart
 }
@@ -34,7 +34,7 @@ func (chart *Chartisan) Extra(value map[string]interface{}) *Chartisan {
 func (chart *Chartisan) AdvancedDataset(
 	name string,
 	values []float64,
-	extra map[string]interface{},
+	extra map[string]string,
 ) *Chartisan {
 	dataset := chart.getDataset(name)
 	if dataset != nil {

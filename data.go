@@ -2,15 +2,15 @@ package golang
 
 // ChartData represents the chart information.
 type ChartData struct {
-	Labels []string               `json:"labels"`
-	Extra  map[string]interface{} `json:"extra"`
+	Labels []string          `json:"labels"`
+	Extra  map[string]string `json:"extra"`
 }
 
 // DatasetData represents the dataset information.
 type DatasetData struct {
-	Name   string                 `json:"name"`
-	Values []float64              `json:"values"`
-	Extra  map[string]interface{} `json:"extra"`
+	Name   string            `json:"name"`
+	Values []float64         `json:"values"`
+	Extra  map[string]string `json:"extra"`
 }
 
 // ServerData represents how the server is expected
