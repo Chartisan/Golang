@@ -16,10 +16,10 @@ func setHeaders(w http.ResponseWriter) {
 }
 
 // randomData returns a random number between 0 and 50 n tmes.
-func randomData(n int) []int {
-	list := []int{}
+func randomData(n int) []float64 {
+	list := []float64{}
 	for i := 0; i < n; i++ {
-		list = append(list, int(rand.Int31n(50)))
+		list = append(list, rand.Float64()*100)
 	}
 	return list
 }
